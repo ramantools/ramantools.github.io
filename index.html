@@ -7,72 +7,195 @@
     <!-- Include SheetJS (XLSX) library from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
+        :root {
+            --background: #000000;
+            --surface: #1C2526;
+            --text: #FFFFFF;
+            --text-secondary: #A3BFFA;
+            --primary: #007AFF; /* iOS Blue */
+            --primary-dark: #005BB5;
+            --border: #4A5859;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --rainbow-glow: linear-gradient(
+                45deg,
+                #ff0000,
+                #ff9900,
+                #33cc33,
+                #00ccff,
+                #cc00ff,
+                #ff0000
+            );
         }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            background-color: var(--surface);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--shadow);
         }
+
         h1 {
             text-align: center;
-            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0 0 24px;
         }
+
         .section {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
         }
+
         select, input[type="text"], input[type="number"], textarea {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #2C3E50;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-sizing: border-box;
+            transition: border-color 0.2s, transform 0.2s;
         }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
         button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
+            background-color: var(--primary);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-right: 10px;
+            transition: background-color 0.2s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .generate-button {
+            background: var(--rainbow-glow);
+            background-size: 200%;
+            animation: rainbowGlow 4s linear infinite;
+        }
+
+        .copy-button::before {
+            content: '📋';
+            margin-right: 8px;
+        }
+
+        @keyframes rainbowGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
         textarea {
             height: 400px;
             resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
         }
+
+        textarea:focus {
+            box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+        }
+
         .output {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #e9ecef;
-            border-radius: 4px;
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #2C3E50;
+            border-radius: 12px;
         }
+
         .checkbox-group {
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            transition: transform 0.2s;
         }
+
+        .checkbox-group:hover {
+            transform: translateX(4px);
+        }
+
         .checkbox-group input[type="checkbox"] {
-            margin-right: 10px;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: #2C3E50;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-right: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.2s, border-color 0.2s;
         }
+
+        .checkbox-group input[type="checkbox"]:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-group input[type="checkbox"]:checked::after {
+            content: '✔';
+            color: #FFFFFF;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+
         .hidden {
             display: none;
         }
+
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            justify-content: center;
         }
     </style>
 </head>
@@ -81,11 +204,11 @@
         <h1>Email Snippet Generator</h1>
         <form id="emailForm">
             <div class="section">
-                <label for="customerName">Customer Name:</label>
+                <label for="customerName">Customer Name</label>
                 <input type="text" id="customerName" name="customerName" placeholder="e.g., John">
             </div>
             <div class="section">
-                <label for="emailType">Select Email Type:</label>
+                <label for="emailType">Email Type</label>
                 <select id="emailType" name="emailType">
                     <option value="rebill">Rebill</option>
                     <option value="unbilled">Unbilled</option>
@@ -93,56 +216,56 @@
                 </select>
             </div>
             <div class="section" id="uninvoicedDates" style="display: none;">
-                <label for="uninvoicedStartDate">Uninvoiced Charge Start Date:</label>
+                <label for="uninvoicedStartDate">Uninvoiced Charge Start Date</label>
                 <input type="text" id="uninvoicedStartDate" name="uninvoicedStartDate" placeholder="e.g., January 2024">
-                <label for="uninvoicedEndDate">Uninvoiced Charge End Date:</label>
+                <label for="uninvoicedEndDate">Uninvoiced Charge End Date</label>
                 <input type="text" id="uninvoicedEndDate" name="uninvoicedEndDate" placeholder="e.g., March 2024">
             </div>
             <div class="section">
-                <label>Optional Sections:</label>
+                <label>Optional Sections</label>
                 <div class="checkbox-group">
                     <input type="checkbox" id="writeOff" name="writeOff">
-                    <label for="writeOff" style="display: inline;">Write Off</label>
+                    <label for="writeOff">Write Off</label>
                     <input type="number" id="writeOffAmount" name="writeOffAmount" placeholder="Enter write off amount (e.g., 100)" class="hidden" step="0.01">
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="estimatedReading" name="estimatedReading">
-                    <label for="estimatedReading" style="display: inline;">Billed to Estimated Reading</label>
+                    <label for="estimatedReading">Billed to Estimated Reading</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="debitMatchesInvoice" name="debitMatchesInvoice">
-                    <label for="debitMatchesInvoice" style="display: inline;">Account Debit Balance Matches Invoice Total</label>
+                    <label for="debitMatchesInvoice">Account Debit Balance Matches Invoice Total</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="higherBalance" name="higherBalance">
-                    <label for="higherBalance" style="display: inline;">Account Sits in Higher Balance than Invoice Amount</label>
+                    <label for="higherBalance">Account Sits in Higher Balance than Invoice Amount</label>
                     <input type="number" id="higherBalanceAmount" name="higherBalanceAmount" placeholder="Enter remaining payment amount (e.g., 50)" class="hidden" step="0.01">
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="lowerBalance" name="lowerBalance">
-                    <label for="lowerBalance" style="display: inline;">Account Sits in Lower Balance than Invoice Amount</label>
+                    <label for="lowerBalance">Account Sits in Lower Balance than Invoice Amount</label>
                     <input type="number" id="lowerBalanceAmount" name="lowerBalanceAmount" placeholder="Enter payment amount (e.g., 30)" class="hidden" step="0.01">
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="creditBalance" name="creditBalance">
-                    <label for="creditBalance" style="display: inline;">Account Sits in a Credit Balance</label>
+                    <label for="creditBalance">Account Sits in a Credit Balance</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="creditRefund" name="creditRefund">
-                    <label for="creditRefund" style="display: inline;">Final Bill Credit Refund</label>
+                    <label for="creditRefund">Final Bill Credit Refund</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="noDirectDebit" name="noDirectDebit">
-                    <label for="noDirectDebit" style="display: inline;">No Active Direct Debit</label>
+                    <label for="noDirectDebit">No Active Direct Debit</label>
                 </div>
             </div>
             <div class="button-group">
-                <button type="button" onclick="generateEmail()">Generate Email</button>
-                <button type="button" onclick="copyEmail()">Copy Email</button>
+                <button type="button" class="generate-button" onclick="generateEmail()">Generate Email</button>
+                <button type="button" class="copy-button" onclick="copyEmail()">Copy Email</button>
             </div>
         </form>
         <div class="output">
-            <label for="output">Generated Email:</label>
+            <label for="output">Generated Email</label>
             <textarea id="output" readonly></textarea>
         </div>
     </div>
